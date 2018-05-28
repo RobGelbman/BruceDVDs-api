@@ -2,7 +2,9 @@ const express    = require('express');
 const commentApi = express.Router();
 const ObjectId        = require('mongoose').Types.ObjectId;
 
-const Comment       = require('../models/comments');
+const Comment       = require('../models/comment');
+const User       = require('../models/user');
+const Dvd       = require('../models/dvd');
 
 
 commentApi.post('/submitComment', (req, res, next) => {
@@ -10,7 +12,6 @@ commentApi.post('/submitComment', (req, res, next) => {
   const username = req.body.username;
   const userId = ObjectId(req.body.userId);
   const comment = req.body.comment;
-  console.log("backend")
 
   if (!comment ) {
     res.status(400).json({ message: 'Provide a comment' });
@@ -24,13 +25,36 @@ commentApi.post('/submitComment', (req, res, next) => {
     comment
   });
 
-  theComment.save((err) => {
+  theComment.save((err, comment) => {
     if (err) {
       res.status(400).json({ message: 'Something went wrong' });
       return;
     }
+    
+    User.findByIdAndUpdate(req.body.userId, {$push: {comments: ObjectId(comment._id)}}, {"upsert" : true})
+    .then((user) => { 
+      console.log ("Success!")
+    })
+    .catch((err) => { console.log('An error happened:', err) })
+
+    Dvd.updateOne({"version.detailId": req.body.currentDVD}, {$push: {"version.$.comment": ObjectId(comment._id)}})
+    .then((user) => { 
+      console.log ("Success!", user)
+    })
+    .catch((err) => { console.log('An error happened:', err) })
+
   });
 
+});
+
+/* GET DVD by Id */
+commentApi.get('/:id', (req, res, next) => {
+  console.log(req.params.id)
+  Comment.find({dvdDetailId: req.params.id})
+  .then(comments => {      
+    res.json(comments);
+  })
+  .catch(error => next(error))
 });
 
 // /* GET all DVDs */
