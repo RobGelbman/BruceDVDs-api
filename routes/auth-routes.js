@@ -9,7 +9,6 @@ const authRoutes = express.Router();
 authRoutes.post('/signup', (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
-  console.log("backend")
   if (!username || !password) {
     res.status(400).json({ message: 'Provide username and password' });
     return;
@@ -75,6 +74,13 @@ authRoutes.post('/login', (req, res, next) => {
 authRoutes.post('/logout', (req, res, next) => {
   req.logout();
   res.status(200).json({ message: 'Success' });
+});
+
+authRoutes.get('/loggedin',(req, res, next) => {
+  if (req.isAuthenticated()){
+    res.status(200).json(req.user);
+  }
+  res.status(403).json({message: 'Unauthorized'})
 });
 
 module.exports = authRoutes;

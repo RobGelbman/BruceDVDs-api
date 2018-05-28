@@ -76,6 +76,9 @@ app.use('/', authRoutes);
 const dvdsApi    = require('./routes/dvd-api');
 app.use('/api', dvdsApi);
 
+const commentApi    = require('./routes/comments');
+app.use('/comments', commentApi);
+
 app.use((req, res, next) => {
   res.sendfile(__dirname + '/public/index.html');
 });

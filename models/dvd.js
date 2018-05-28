@@ -28,7 +28,10 @@ const dvdSchema = new Schema({
         rating: Number,
         description: String,
         capture: [{filename: String, caption: String}],
-        coverArt: Boolean
+        coverArt: Boolean,
+        comment: [Schema.Types.ObjectId],
+        have: [Schema.Types.ObjectId],
+        want: [Schema.Types.ObjectId]
       }
     ]
 
