@@ -31,7 +31,7 @@ authRoutes.post('/signup', (req, res, next) => {
     console.log(username)
     theUser.save((err) => {
       if (err) {
-        res.status(403).json({ message: 'Something went wrong', err });
+        res.status(400).json({ message: err });
         return;
       }
 
