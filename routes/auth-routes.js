@@ -28,10 +28,10 @@ authRoutes.post('/signup', (req, res, next) => {
       password: hashPass
     });
 
-    console.log(username)
     theUser.save((err) => {
+      console.log(username)
       if (err) {
-        res.status(400).json({ message: err });
+        res.status(400).json({ message: 'Something went wrong'});
         return;
       }
 
