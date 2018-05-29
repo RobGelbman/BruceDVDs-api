@@ -24,13 +24,14 @@ authRoutes.post('/signup', (req, res, next) => {
     const hashPass = bcrypt.hashSync(password, salt);
 
     const theUser = new User({
-      username,
+      username: username,
       password: hashPass
     });
 
+    console.log(username)
     theUser.save((err) => {
       if (err) {
-        res.status(400).json({ message: 'Something went wrong' });
+        res.status(403).json({ message: 'Something went wrong', err });
         return;
       }
 
