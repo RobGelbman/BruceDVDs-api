@@ -43,6 +43,8 @@ commentApi.post('/submitComment', (req, res, next) => {
     })
     .catch((err) => { console.log('An error happened:', err) })
 
+    return res.json(comment);
+
   });
 
 });
