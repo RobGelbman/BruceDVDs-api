@@ -12,6 +12,22 @@ dvdApi.get('/dvds', (req, res, next) => {
   .catch(error => next(error))
 });
 
+dvdApi.get('/dvds/:type', (req, res, next) => {
+  if (req.params.type === 'compilation' || req.params.type === 'documentary'){
+    Dvd.find({dvdType: req.params.type}).sort('dvdLocation.venue')
+    .then(dvdList => {
+      res.json(dvdList);
+    })
+    .catch(error => next(error))
+  } else {
+    Dvd.find({dvdType: req.params.type}).sort('dvdDate').sort('dvdLocation.venue')
+  .then(dvdList => {
+    res.json(dvdList);
+  })
+  .catch(error => next(error))
+  }
+});
+
 /* GET DVD by Id */
 dvdApi.get('/dvdDetail/:id', (req, res, next) => {
   Dvd.find({'version.detailId': req.params.id}, {"version.$": 1})
